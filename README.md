@@ -5,9 +5,9 @@ Bismillah Dimudahkan matkul PPLnya
 <pre>
   git clone https://github.com/hfzdzakii/pplWebForum.git
 </pre>
-2. Bikin remote baru dengan code
+2. Masuk ke dalam folder dengan command :
 <pre>
-  git remote add origin https://github.com/hfzdzakii/pplWebForum.git
+  cd pplWebForum
 </pre>
 3. Bikin file baru dengan nama <strong>connectDb.php</strong> dan paste code :
     Pokoke sesuaike ae karo settingan XAMPP mu
