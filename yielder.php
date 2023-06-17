@@ -51,7 +51,7 @@ class Yielder
                 <div class="mr-[110px] hs-dropdown relative flex-col   ">
                     <button id="dropdown-toggle" name="profilButton" class="type=buttonn bg-[#D90429] pb-1 px-4 pt-1 hover:bg-blue-600 text-white font-medium rounded-full transition duration-300">NAMA
                     </button>
-                    <div class="origin-top-right absolute mt-2 w-[150px]  shadow-lg  hidden flex flex-col" id="dropdown-menu">
+                    <div class="origin-top-right absolute mt-2 w-[150px] z-[100]  shadow-lg  hidden flex flex-col" id="dropdown-menu">
                         <button class=" bg-[#D90429] type=buttonn text-white rounded-full mb-1 pb-1 px-1 pt-1">Edit Profil</button>
                         <button class=" bg-[#D90429] type=buttonn text-white rounded-full pb-1 px-4 pt-1">Logout</button>
                     </div>
