@@ -10,20 +10,24 @@ $header = $yielder->getHeader();
 <?php echo $head ?>
 <?php echo $header ?>
 
-<!-- <div class=" w-[100vw] h-[50px] bg-[#2B2D42] flex items-center justify-between	">
-    <div class="ml-[110px] text-[20px] text-center text-[#D90429]">
-        <a href="homePage.php">WEB FORUM</a>
+<div class="flex justify-center w-[100vw] relative p-[10px]  ">
+    <div class=" flex w-[50%]  h-[1000px] mr-5 bg-blue-500 ">
+        sddasf
     </div>
-    <div class="mr-[110px] hs-dropdown relative flex-col   ">
-        <button id="dropdown-toggle" name="profilButton" class="type=buttonn bg-[#D90429] pb-1 px-4 pt-1 hover:bg-blue-600 text-white font-medium rounded-full transition duration-300">NAMA
-        </button>
-        <div class="origin-top-right absolute mt-2 w-[150px]  shadow-lg  hidden flex flex-col" id="dropdown-menu">
-            <button class=" bg-[#D90429] type=buttonn text-white rounded-full mb-1 pb-1 px-1 pt-1">Edit Profil</button>
-            <button class=" bg-[#D90429] type=buttonn text-white rounded-full pb-1 px-4 pt-1">Logout</button>
-        </div>
+    <div class="flex w-[30%] h-[100px] bg-[#FFFFFF] sticky top-0">
+            <div class="w-[100%] border-2 border-black">
+                <div class="text-center text-[20px] bg-[#D90429] text-[#FFFFFF] flex flex-col">
+                    Newest Questions
+                </div>
+                <div class="flex items-center justify-center">
+                    <div class="text-center m-auto  border-2 w-[400px] h-[40px] mt-2 border-black rounded-full">
+                        Question Tittle
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
 
-    </div>
-</div>-->
 <script>
     $(document).ready(function() {
         $('#dropdown-toggle').click(function() {
