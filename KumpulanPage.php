@@ -1,13 +1,19 @@
 <?php
 session_start();
 include_once('yielder.php');
-$yielder = new Yielder($_SESSION['state']);
+$state = "KumpulanPage";
+$yielder = new Yielder($state);
 $head = $yielder->getHead();
 $tail = $yielder->getTail();
+$header = $yielder->getHeader($state);
 ?>
+
 <?php echo $head ?>
+<?php
+     echo $header;
+?>
 <div class=" bg-[#2B2D42] flex items-center justify-center flex-col px-80">
-        <div class="bg-white p-10  rounded shadow-md flex items-center justify-center flex-col ">
+        <div class="bg-white p-10  rounded shadow-md flex items-center justify-center flex-col mt-6">
             <div class="border-solid border-2 border-sky-500 pb-8 mb-8">
                 <div class="px-8 py-8 text-2xl font-semibold">
                     <b>JUDUL PERTANYAAN</b>
