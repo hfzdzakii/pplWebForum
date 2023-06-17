@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $baris = $cek_username->fetchAll(PDO::FETCH_ASSOC);
                 if(password_verify($password,$baris[0]['password'])){
                     $_SESSION['login'] = true;
-                    $_SESSION['username'] = $barisp[0]['username'];
+                    $_SESSION['username'] = $baris[0]['username'];
                     $_SESSION['akses'] = $baris[0]['akses'];
                     echo "<meta http-equiv='refresh' content='0; url=HomePage.php'>";
                     die();
@@ -24,13 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch(PDOException $e){
             echo "Error " . $e->getMessage();
         }
-        $_SESSION['error'] = 'Usernmae dan Password Tidak Cocok';
+        $_SESSION['error'] = 'Username dan Password Tidak Cocok';
         echo "<meta http-equiv='refresh' content='0; url=LoginPage.php'>";
         die();
-
-        
-        // $_SESSION['pesan'] = '';
-        // die();
     } else {
         unset($_SESSION['login']);
         unset($_SESSION['username']);
