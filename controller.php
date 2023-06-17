@@ -7,11 +7,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = strtolower(stripslashes($_POST['UsernameLogin']));
         $password = $_POST['PasswordLogin'];
         // cek username di db
-        $cek_username = $pdo->prepare("SELECT * FROM 'user' WHERE 'username' = '$username'; ");
+        $cek_username = $pdo->prepare("SELECT * FROM user WHERE username = '$username'; ");
         try{
             $cek_username->execute();
             if($cek_username->rowCount()==1){
-                //cek password
+                // cek password
                 $baris = $cek_username->fetchAll(PDO::FETCH_ASSOC);
                 if(password_verify($password,$baris[0]['password'])){
                     $_SESSION['login'] = true;
@@ -27,6 +27,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['error'] = 'Username dan Password Tidak Cocok';
         echo "<meta http-equiv='refresh' content='0; url=LoginPage.php'>";
         die();
+    } else if(isset($_POST['RegisterButton'])){
+        $_SESSION['pesan'] = '';
+
+        $username = strtolower(stripslashes($_POST['Username']));
+        $password1 = $_POST['Password'];
+        $password2 = $_POST['ConfirmPassword'];
+
+        // cek duplikat username di DB
+        $cek_user = $pdo->prepare("SELECT `username` FROM `user` WHERE `username` = '$username';");
+        try {
+            $cek_user->execute();
+            if ($cek_user->fetchAll(PDO::FETCH_ASSOC)) {
+                $_SESSION['error'] = true;
+                $_SESSION['pesan'] = "Username sudah digunakan";
+                goto end;
+            }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+
+        // cek kemiripan password dan konfirmasi password
+        if ($password1 !== $password2) {
+            $_SESSION['error'] = true;
+            $_SESSION['pesan'] = "Konfirmasi Password tidak sesuai!";
+            goto end;
+        }
+
+        // enkripsi password
+        $password = password_hash($password1, PASSWORD_DEFAULT);
+
+        // masukan data ke DB
+        $query = $pdo->prepare("INSERT INTO `user` VALUES(null, :usrname, :pass, 'customer');");
+        $query->bindParam(':usrname', $username);
+        $query->bindParam(':pass', $password);
+
+        // cek kesuksesan data masuk DB
+        try {
+            $query->execute();
+            $_SESSION['didit'] = true;
+            $_SESSION['pesan'] = "User Baru berhasil ditambahkan!";
+            goto end;
+        } catch (PDOException $e) {
+            $_SESSION['error'] = true;
+            $_SESSION['pesan'] = "Ada sesuatu yang salah!";
+            echo $e->getMessage();
+            goto end;
+        }
+        end:
+        echo "<meta http-equiv='refresh' content='0; url=RegisterPage.php'>";
     } else {
         unset($_SESSION['login']);
         unset($_SESSION['username']);

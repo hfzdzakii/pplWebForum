@@ -6,10 +6,9 @@ include_once('connectDb.php');
 // HANDLING SESSION LOGIN
 $state = "EditUserPage";
 
-$yielder = new Yielder($state);
+$yielder = new Yielder();
 $head = $yielder->getHead();
 $tail = $yielder->getTail();
-$header = $yielder->getHeader($state);
 ?>
 
 <?php echo $head ?>

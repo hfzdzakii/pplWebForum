@@ -14,7 +14,7 @@ $tail = $yielder->getTail();
 <div class="w-[100vw] h-[100vh] bg-[#2B2D42] flex items-center justify-center flex-col	">
     <div class="text-center font-semibold text-[#D90429] pb-10 text-6xl">WEB FORUM</div>
     <div class="bg-[#EDF2F4] p-10 rounded shadow-md flex items-center justify-center flex-col">
-        <h2 class="text-2xl font-semibold justify-center">Login</h2>
+        <p class="text-[#000000] font-[400] text-[40px]">Login</p>
         <hr class="border border-black w-[600px] my-4">
         <form action="controller.php" method="post" class="flex justify-center flex-col items-center">
             <?php if (isset($_SESSION['error'])) : ?>
@@ -27,8 +27,15 @@ $tail = $yielder->getTail();
         </form>
         <hr class="border border-black w-[600px] mb-4">
         <div class="flex items-center justify-between flex-col ">
-            <button name="RegisterButton" class="transition duration-300 bg-[#D90429] w-[354px] h-[45px] hover:bg-[#2B2D42] text-white font-medium px-4 py-2 rounded">Create New Account</button>   
+            <button id="createAcc" name="RegisterButton" class="transition duration-300 bg-[#D90429] w-[354px] h-[45px] hover:bg-[#2B2D42] text-white font-medium px-4 py-2 rounded">Create New Account</button>   
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $('#createAcc').on('click', function() {
+            window.location.href = 'RegisterPage.php'
+        })
+    });
+</script>
 <?php echo $tail?>
