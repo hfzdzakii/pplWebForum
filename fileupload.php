@@ -16,13 +16,13 @@ if(isset($_FILES['upload']['name']))
         else
         {
             $data['uploaded'] = 0;
-            $data['error']['message'] = "ehehe";
+            $data['error']['message'] = "Ada yang Salah";
         }
     }
     else
     {
         $data['uploaded'] = 0;
-        $data['error']['message'] = "xixixi";
+        $data['error']['message'] = "Format Tidak Didukung";
     }
 }
 echo json_encode($data);

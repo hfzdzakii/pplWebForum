@@ -153,7 +153,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
-
+        echo "<meta http-equiv='refresh' content='0; url=NewestPage.php'>";
+        die();
     } else {
         unset($_SESSION['login']);
         unset($_SESSION['username']);
