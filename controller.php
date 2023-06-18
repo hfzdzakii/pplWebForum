@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $baris = $cek_username->fetchAll(PDO::FETCH_ASSOC);
                 if(password_verify($password,$baris[0]['password'])){
                     $_SESSION['login'] = true;
+                    $_SESSION['id'] = $baris[0]['id_user'];
                     $_SESSION['username'] = $baris[0]['username'];
                     $_SESSION['akses'] = $baris[0]['akses'];
                     echo "<meta http-equiv='refresh' content='0; url=HomePage.php'>";
@@ -76,11 +77,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         end:
         echo "<meta http-equiv='refresh' content='0; url=RegisterPage.php'>";
+    }else if(isset($_POST['SubmitEdit'])) {
+        $_SESSION['pesan'] = '';
+
+        $id = $_GET['id'];
+        $username = strtolower(stripslashes($_POST['UsernameEdit']));
+        $password1 = $_POST['PasswordEdit'];
+        $password2 = $_POST['PasswordConfirmEdit'];
+
+        if ($password1 !== $password2) {
+            $_SESSION['error'] = true;
+            $_SESSION['pesan'] = "Konfirmasi Password tidak sesuai!";
+            goto endd;
+        }
+
+        $password = password_hash($password1, PASSWORD_DEFAULT);
+
+        $update_user = $pdo->prepare("UPDATE user SET username = :username, password = :password WHERE id_user = :id");
+        $update_user->bindParam(':username', $username);
+        $update_user->bindParam(':password', $password);
+        $update_user->bindParam(':id', $id);
+
+        try {
+            $update_user->execute();
+            $_SESSION['didit'] = true;
+            $_SESSION['pesan'] = "Akun Anda berhasil diupdate!";
+            $_SESSION['username'] = $username;
+            goto endd;
+        } catch (PDOException $e) {
+            $_SESSION['error'] = true;
+            $_SESSION['pesan'] = "Ada sesuatu yang salah!";
+            echo $e->getMessage();
+            goto endd;
+        }
+
+        endd:
+        echo "<meta http-equiv='refresh' content='0; url=EditUserPage.php?id=".$id."'>";
     } else {
         unset($_SESSION['login']);
         unset($_SESSION['username']);
         unset($_SESSION['akses']);
-        echo "<meta http-equiv='refresh' content='0; url=login.php'>";
+        echo "<meta http-equiv='refresh' content='0; url=LoginPage.php'>";
         die();
     }
 } else {
@@ -93,14 +130,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             unset($_SESSION['login']);
             unset($_SESSION['username']);
             unset($_SESSION['akses']);
-            echo "<meta http-equiv='refresh' content='0; url=login.php'>";
+            echo "<meta http-equiv='refresh' content='0; url=LoginPage.php'>";
             die();
         }
     } else {
         unset($_SESSION['login']);
         unset($_SESSION['username']);
         unset($_SESSION['akses']);
-        echo "<meta http-equiv='refresh' content='0; url=login.php'>";
+        echo "<meta http-equiv='refresh' content='0; url=LoginPage.php'>";
         die();
     }
 }

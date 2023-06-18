@@ -2,9 +2,13 @@
 session_start();
 include_once('yielder.php');
 include_once('connectDb.php');
-$_SESSION['state'] = 'login';
 
-$yielder = new Yielder($_SESSION['state']);
+if (isset($_SESSION['login'])) {
+    echo "<meta http-equiv='refresh' content='0; url=HomePage.php'>";
+    die();
+}
+
+$yielder = new Yielder();
 $head = $yielder->getHead();
 $tail = $yielder->getTail();
 

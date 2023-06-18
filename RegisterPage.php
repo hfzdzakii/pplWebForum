@@ -3,9 +3,12 @@ session_start();
 include_once("yielder.php");
 include_once("connectDB.php");
 
-$state = 'register';
+if (isset($_SESSION['login'])) {
+    echo "<meta http-equiv='refresh' content='0; url=HomePage.php'>";
+    die();
+}
 
-$yielder = new Yielder($state);
+$yielder = new Yielder();
 $head = $yielder->getHead();
 $tail = $yielder->getTail();
 ?>
@@ -21,14 +24,14 @@ $tail = $yielder->getTail();
 		<hr class="border border-black w-[600px] my-4">
 		<form action="controller.php" method="post" class="flex justify-center flex-col items-center">
 			<?php if (isset($_SESSION['error'])) : ?>
-                    <p style="color: red; font-style: italic;"><?php echo $_SESSION['pesan'];
-                                                                unset($_SESSION['pesan']);
-                                                                unset($_SESSION['error']); ?></p>
+                    <p style="color: red; font-style: italic; margin-bottom: 1rem;"><?php echo $_SESSION['pesan'];
+																						unset($_SESSION['pesan']);
+																						unset($_SESSION['error']); ?></p>
 			<?php endif ?>
 			<?php if (isset($_SESSION['didit'])) : ?>
-				<p style="color: blue; font-style: italic;"><?php echo $_SESSION['pesan'];
-															unset($_SESSION['pesan']);
-															unset($_SESSION['didit']); ?></p>
+				<p style="color: blue; font-style: italic; margin-bottom: 1rem;"><?php echo $_SESSION['pesan'];
+																					unset($_SESSION['pesan']);
+																					unset($_SESSION['didit']); ?></p>
 			<?php endif ?>
 			<input type="text" placeholder="Username" name="Username" class="mb-4 border border-gray-300 px-3 py-2 rounded w-[354px] h-[45px]" required/>
 			<input type="password" placeholder="Password" name="Password" class="mb-4 border border-gray-300 px-3 py-2 rounded w-[354px] h-[45px]" required/>
