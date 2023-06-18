@@ -6,61 +6,86 @@ $_SESSION['state'] = 'login';
 
 
 $state = "JawabPage";
-$yielder = new Yielder($state);
+$id = $_SESSION['id'];
+$id_pertanyaan = $_GET['idPertanyaan'];
+$nama = $_SESSION['username'];
+
+$yielder = new Yielder($state, $nama);
 $head = $yielder->getHead();
 $tail = $yielder->getTail();
-$header = $yielder->getHeader($state);
+$header = $yielder->getHeader($state, $nama);
 
-
+$pertanyaan = $pdo->prepare("SELECT * FROM pertanyaan where id_pertanyaan=". $id_pertanyaan .";");
+try {
+    $pertanyaan->execute();
+    $data = $pertanyaan->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo $e->getMessage();
+}
 ?>
 
 <?php echo $head ?>
 <?php echo $header?>
 <?php
-    
-    if(isset($_REQUEST['kirimJawaban']))
-    {
-       $content = $_REQUEST['content'];
+    // if(isset($_REQUEST['kirimJawaban']))
+    // {
+    //    $content = $_REQUEST['content'];
 
-        $insert_query = $pdo->prepare("INSERT into jawaban values(null,1,'$content',0,1,'farel','1')");
-        try {
-            $insert_query->execute();
+    //     $insert_query = $pdo->prepare("INSERT into jawaban values(null,1,'$content',0,1,'farel','1')");
+    //     try {
+    //         $insert_query->execute();
             
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
+    //     } catch (PDOException $e) {
+    //         echo $e->getMessage();
+    //     }
+    // }
 ?>
-<div class="h-screen w-sreen bg-[#EDF2F4] flex flex-col space-y-5 items-center">
-    <div class="bg-[#EDF2F4] w-4/5">
-        <p class="text-[35px]"> JUDUL PERTANYAAN </p>
+<div class="h-screen w-sreen bg-[#EDF2F4] flex flex-col items-center">
+    <div class="bg-[#EDF2F4] w-4/5 mt-[10px] ">
+        <p class="text-[35px]"> <?php echo $data[0]['pertanyaan'] ?> </p>
     </div>
     <div class="w-4/5 space-y-5">
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="controller.php?idPertanyaan=<?php echo $id_pertanyaan ?>&idUser=<?php echo $id ?>" method="post" enctype="multipart/form-data">
                 <p class="text-[20px]"> Send as : </p>
-                <input name="ass" type="radio" /> <label> Username </label>
+                <input name="sebagai" type="radio" value="<?php echo $nama ?>" checked/> <label> <?php echo $nama ?> </label>
                 <br>
-                <input name="as" type="radio" /> <label> Anonymous </label>
-                <textarea name="content" id="content" cols="30" rows="10"></textarea>
-                <button name="kirimJawaban" class="bg-[#D90429] w-[100px] h-[40px] rounded-[5px] text-white border-black border-2"> Send </button>
+                <input name="sebagai" type="radio" value="anonymous"/> <label> Anonymous </label>
+                <br>
+                <textarea name="content" id="content" cols="30" rows="10" class="mt-[10px]"></textarea>
+                <button type="submit" name="kirimJawaban" class="bg-[#D90429] w-[100px] h-[40px] rounded-[5px] text-white border-black border-2"> Send </button>
         </form>
-        <!-- <div class="text-[20px] text-red-500">
-        </div> -->
 </div>
-<div id="editor"> </div>
-                        <script>
-                                ClassicEditor
-                                        .create( document.querySelector( '#content' ),{
-                                            ckfinder:
-                                            {
-                                                uploadUrl: 'fileupload.php'
-                                            }
-                                        } )
-                                        .then( editor => {
-                                                console.log( editor );
-                                        } )
-                                        .catch( error => {
-                                                console.error( error );
-                                        } );
-                        </script> 
+<!-- <div id="editor"> </div> -->
+<script>
+        ClassicEditor
+                .create( document.querySelector( '#content' ),{
+                    ckfinder:
+                    {
+                        uploadUrl: 'fileupload.php'
+                    }
+                } )
+                .then( editor => {
+                        console.log( editor );
+                } )
+                .catch( error => {
+                        console.error( error );
+                } );
+</script> 
+
+<script>
+    $(document).ready(function() {
+        $('#dropdown-toggle').click(function() {
+            $('#dropdown-menu').toggleClass('hidden');
+        });
+        
+        $('#logot').click(function() {
+            window.location.href = 'controller.php'
+        })
+
+        $('#editUserPass').click(function() {
+            window.location.href = 'EditUserPage.php?id=<?php echo $id ?>'
+        })
+    })
+</script>
+
 <?php echo $tail?>

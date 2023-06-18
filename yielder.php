@@ -40,8 +40,9 @@ class Yielder
 
     private function headerContent($state, $nama)
     {
+        $hasil2 = $state == "JawabPage" ? 'KumpulanPage.php' : 'HomePage.php';
         $hasil = $state == "HomePage" ? '' : '<div class="absolute left-[30px] ">
-                                                    <a href="HomePage.php"><img width="25" height="25" src="https://img.icons8.com/ios/50/FFFFFF/double-left.png" alt="double-left"/></a>
+                                                    <a href="'. $hasil2.'"><img width="25" height="25" src="https://img.icons8.com/ios/50/FFFFFF/double-left.png" alt="double-left"/></a>
                                                 </div>';
         ob_start();
         echo '<div class=" w-[100vw] h-[50px] bg-[#2B2D42] flex items-center justify-between	">

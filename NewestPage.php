@@ -148,7 +148,7 @@ try {
                 </div>
             </div>
             <button id="moreQuestion" class="text-center rounded-md bg-[#D90429] mt-2 h-[40px] w-[100%] text-[#FFFFFF]">More Questions</button>
-            <button id="morePost" class="text-center rounded-md bg-[#D90429] mt-2 h-[40px] w-[100%] text-[#FFFFFF]">More Post</button>
+            <button id="topPost" class="text-center rounded-md bg-[#D90429] mt-2 h-[40px] w-[100%] text-[#FFFFFF]">Top Post</button>
         </div>
     </div>
 </div>
@@ -178,8 +178,8 @@ try {
             window.location.href = 'KumpulanPage.php'
         })
 
-        $('#morePost').click(function() {
-            window.location.href = 'NewestPage.php'
+        $('#topPost').click(function() {
+            window.location.href = 'HomePage.php'
         })
 
 

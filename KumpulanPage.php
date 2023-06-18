@@ -12,7 +12,7 @@ if (isset($_SESSION['login'])) {
 
 $state = "KumpulanPage";
 $nama = $_SESSION['username'];
-$akses = $_SESSION['akses'];
+$id = $_SESSION['id'];
 
 $yielder = new Yielder($state, $nama);
 $head = $yielder->getHead();
@@ -20,7 +20,7 @@ $tail = $yielder->getTail();
 $header = $yielder->getHeader($state, $nama);
 
 // SQL GOES HERE
-$daftarPertanyaan = $pdo->prepare("SELECT pertanyaan.id_pertanyaan as id, pertanyaan.pertanyaan as tanya, user.username as nama FROM `pertanyaan` INNER JOIN user ON pertanyaan.id_user = user.id_user;");
+$daftarPertanyaan = $pdo->prepare("SELECT pertanyaan.id_pertanyaan as id, pertanyaan.pertanyaan as tanya, user.username as nama FROM `pertanyaan` INNER JOIN user ON pertanyaan.id_user = user.id_user ORDER BY waktu DESC;");
 try {
     $daftarPertanyaan->execute();
     $Pertanyaan = $daftarPertanyaan->fetchAll(PDO::FETCH_ASSOC);
@@ -34,7 +34,7 @@ try {
 <div class=" bg-[#EDF2F4] flex items-center justify-center flex-col px-80">
     <div class="p-10 flex items-center justify-center flex-col mt-1">
         <?php foreach($Pertanyaan as $baris) : ?>
-            <a href="" class="w-[100%] bg-white rounded-md border-solid border-2 border-[#2B2D42] pb-8 mb-8">
+            <a href="JawabPage.php?idPertanyaan=<?php echo $baris['id'] ?>" class="w-[100%] bg-white rounded-md border-solid border-2 border-[#2B2D42] pb-8 mb-8">
                 <div class="px-8 py-2 text-2xl font-semibold">
                     <b><?php echo $baris['tanya'] ?></b>
                 </div>
@@ -51,13 +51,14 @@ try {
         $('#dropdown-toggle').click(function() {
             $('#dropdown-menu').toggleClass('hidden');
         });
+        
+        $('#logot').click(function() {
+            window.location.href = 'controller.php'
+        })
 
-        $(document).click(function(e) {
-            const target = e.target;
-            if (!target.closest('#dropdown-toggle')) {
-                $('#dropdown-menu').addClass('hidden');
-            }
-        });
+        $('#editUserPass').click(function() {
+            window.location.href = 'EditUserPage.php?id=<?php echo $id ?>'
+        })
     })
 </script>
 
