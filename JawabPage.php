@@ -15,25 +15,44 @@ $header = $yielder->getHeader($state);
 
 <?php echo $head ?>
 <?php echo $header?>
+<?php
+    include_once('connectDb.php');
+    if(isset($_REQUEST['kirimjawaban']))
+    {
+        $content = $_REQUEST['content'];
+
+        $insert_query = $mysqli_query($connetDb, "insert into jawaban set jawaban='$content'");
+        if($insert_query)
+        {
+            $msg = "DAta masuk";
+        }
+        else 
+        {
+            $msg = "tidak masuk";
+        }
+    }
+?>
 <div class="h-screen w-sreen bg-[#EDF2F4] flex flex-col space-y-5 items-center">
     <div class="bg-[#EDF2F4] w-4/5">
         <p class="text-[35px]"> JUDUL PERTANYAAN </p>
     </div>
     <div class="w-4/5">
-        <form action="controller.php" method="post">
+        <form action=".php" method="post" enctype="multipart/form-data">
                 <p class="text-[20px]"> Send as : </p>
-                <input type="radio" /> <label> Username </label>
+                <input name="ass" type="radio" /> <label> Username </label>
                 <br>
-                <input type="radio" /> <label> Anonymous </label>
-            <!--textarea class="bg-[#FFFFFF] w-[1185px] border-2 border-black rounded-[5px]"> </textarea-->
+                <input name="as" type="radio" /> <label> Anonymous </label>
+                <textarea name="content" id="content" cols="30" rows="10"></textarea>
+                <button name="kirimJawaban" class="bg-[#D90429] w-[100px] h-[40px] rounded-[5px] text-white border-black border-2"> Send </button>
         </form>
-    </div>
-    <div class="w-4/5">
-        <form action="contorller.php" method="post">
-            <div id="editor"> </div>
+        <div>
+            <?php if(!empty($msg)) {echo $msg;} ?> 
+        </div>
+</div>
+<div id="editor"> </div>
                         <script>
                                 ClassicEditor
-                                        .create( document.querySelector( '#editor' ) )
+                                        .create( document.querySelector( '#content' ) )
                                         .then( editor => {
                                                 console.log( editor );
                                         } )
@@ -41,10 +60,4 @@ $header = $yielder->getHeader($state);
                                                 console.error( error );
                                         } );
                         </script> 
-        </form>
-    </div>
-    <div class="w-4/5">
-        <button class="bg-[#D90429] w-[100px] h-[40px] rounded-[5px] text-white border-black border-2"> Send </button>
-    <div>
-</div>
 <?php echo $tail?>
