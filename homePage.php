@@ -20,6 +20,16 @@ $yielder = new Yielder($state, $nama);
 $head = $yielder->getHead();
 $tail = $yielder->getTail();
 $header = $yielder->getHeader($state, $nama);
+
+// SQL GOES HERE
+$daftarPertanyaan = $pdo->prepare("SELECT pertanyaan, id_pertanyaan FROM pertanyaan ORDER BY waktu DESC LIMIT 10");
+try {
+    $daftarPertanyaan->execute();
+    $Pertanyaan = $daftarPertanyaan->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo $e->getMessage();
+}
+
 ?>
 
 <?php echo $head ?>
@@ -28,11 +38,23 @@ $header = $yielder->getHeader($state, $nama);
 <div class="flex justify-center w-[100vw] relative p-[10px] bg-[#EDF2F4] ">
     <div class=" flex w-[50%]  mr-5 flex-col"> <!-- h-[1000px] -->
         <div class="flex justify-center border-2 border-black h-20 w-[100%] bg-[#FFFFFF]">
-            <form action="" method="post" class="w-[100%] flex justify-center items-center"> <!-- controller.php -->
-                <input type="text" placeholder="ASK" class="text-[20px] font-black border-2 w-[80%] border-black rounded-full text-center" required>
-                <button type="submit" class="text-[20px] ml-2 rounded-full text-center flex justify-center">
-                <img width="50" height="50" src="https://img.icons8.com/ios/50/add--v1.png" alt="add--v1"/>
-                </button>
+            <form action="controller.php?id=<?php echo $id ?>" method="post" class="w-[100%] flex flex-col justify-center items-center"> <!-- controller.php -->
+            <?php if (isset($_SESSION['error'])) : ?>
+                <p style="color: red; font-style: italic; margin-top: 5px;"><?php echo $_SESSION['pesan'];
+                                                                                        unset($_SESSION['pesan']);
+                                                                                        unset($_SESSION['error']); ?></p>
+                <?php endif ?>
+                <?php if (isset($_SESSION['didit'])) : ?>
+                    <p style="color: blue; font-style: italic; margin-top: 5px;"><?php echo $_SESSION['pesan'];
+                                                                                        unset($_SESSION['pesan']);
+                                                                                        unset($_SESSION['didit']); ?></p>
+                <?php endif ?>
+                <div class="w-[100%] mb-[5px] flex flex justify-center items-center">
+                    <input name="AjukanPertanyaan" type="text" placeholder="ASK" class="text-[20px] font-black border-2 w-[80%] border-black rounded-full text-center" required>
+                    <button name="AjukanPertanyaanButton" type="submit" class="text-[20px] ml-2 rounded-full text-center flex justify-center">
+                        <img width="50" height="50" src="https://img.icons8.com/ios/50/add--v1.png" alt="add--v1"/>
+                    </button>
+                </div>
             </form>
         </div>
         <div class="flex justify-center border-2 border-black w-[100%] mt-5 bg-white">
@@ -114,16 +136,15 @@ $header = $yielder->getHeader($state, $nama);
             <div class="w-[100%] bg-[#FFFFFF] border-2 border-black">
                 <div class="text-center text-[18px] py-[5px] bg-[#D90429] text-[#FFFFFF] mb-2">Newest Questions</div>
                 <div class="flex items-center justify-center flex-col">
-                    <div id="pertanyaann" class="cursor-pointer text-center border-2 w-[95%] py-[5px] mb-2 border-black rounded-md">Question Tittle</div>
-                    <div id="pertanyaann" class="cursor-pointer text-center border-2 w-[95%] py-[5px] mb-2 border-black rounded-md">Question Tittle</div>
-                    <div id="pertanyaann" class="cursor-pointer text-center border-2 w-[95%] py-[5px] mb-2 border-black rounded-md">Question Tittle</div>
-                    <div id="pertanyaann" class="cursor-pointer text-center border-2 w-[95%] py-[5px] mb-2 border-black rounded-md">Question Tittle</div>
-                    <div id="pertanyaann" class="cursor-pointer text-center border-2 w-[95%] py-[5px] mb-2 border-black rounded-md">Question Tittle</div>
-                    <div id="pertanyaann" class="cursor-pointer text-center border-2 w-[95%] py-[5px] mb-2 border-black rounded-md">Question Tittle</div>
-                    <div id="pertanyaann" class="cursor-pointer text-center border-2 w-[95%] py-[5px] mb-2 border-black rounded-md">Question Tittle</div>
-                    <div id="pertanyaann" class="cursor-pointer text-center border-2 w-[95%] py-[5px] mb-2 border-black rounded-md">Question Tittle</div>
-                    <div id="pertanyaann" class="cursor-pointer text-center border-2 w-[95%] py-[5px] mb-2 border-black rounded-md">Question Tittle</div>
-                    <div id="pertanyaann" class="cursor-pointer text-center border-2 w-[95%] py-[5px] mb-2 border-black rounded-md">Question Tittle</div>
+                    <?php foreach($Pertanyaan as $baris) : 
+                        if (strlen($baris['pertanyaan']) > 40) {
+                            $modify = substr($baris['pertanyaan'], 0, 40) . "..."; ?>
+                            <a href="<?php echo $baris['id_pertanyaan'] ?>" class="cursor-pointer text-center border-2 w-[95%] py-[5px] mb-2 border-black rounded-md"><?php echo $modify; ?></a>
+                            <?php
+                        } else { ?>
+                            <a href="<?php echo $baris['id_pertanyaan'] ?>" class="cursor-pointer text-center border-2 w-[95%] py-[5px] mb-2 border-black rounded-md"><?php echo $baris['pertanyaan']; ?></a>
+                        <?php } ?>
+                    <?php endforeach ?>
                 </div>
             </div>
             <button id="moreQuestion" class="text-center rounded-md bg-[#D90429] mt-2 h-[40px] w-[100%] text-[#FFFFFF]">More Questions</button>
@@ -150,6 +171,10 @@ $header = $yielder->getHeader($state, $nama);
 
         $('#editUserPass').click(function() {
             window.location.href = 'EditUserPage.php?id=<?php echo $id ?>'
+        })
+
+        $('#moreQuestion').click(function() {
+            window.location.href = 'KumpulanPage.php'
         })
 
 

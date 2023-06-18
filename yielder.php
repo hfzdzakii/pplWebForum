@@ -51,9 +51,9 @@ class Yielder
                 <div class="mr-[110px] hs-dropdown relative flex-col   ">
                     <button id="dropdown-toggle" name="profilButton" class="type=buttonn bg-[#D90429] pb-1 px-4 pt-1 hover:bg-[#96021b] text-white font-medium rounded-full transition duration-300">'.$nama.'
                     </button>
-                    <div class="origin-top-right absolute mt-2 w-[150px] z-[100]  shadow-lg  hidden flex flex-col" id="dropdown-menu">
-                        <button id="editUserPass" class=" bg-[#D90429] text-white rounded-full mb-1 pb-1 px-1 pt-1">Edit Profil</button>
-                        <button id="logot" class=" bg-[#D90429] text-white rounded-full pb-1 px-4 pt-1">Logout</button>
+                    <div class="origin-top-right absolute mt-2 w-[150px] z-[100]  hidden flex flex-col" id="dropdown-menu">
+                        <button id="editUserPass" class="border-black border-2 bg-[#D90429] text-white rounded-full mb-1 pb-1 px-1 pt-1">Edit Profil</button>
+                        <button id="logot" class="border-black border-2 bg-[#D90429] text-white rounded-full pb-1 px-4 pt-1">Logout</button>
                     </div>
                 </div>
             </div>';
@@ -75,16 +75,3 @@ class Yielder
     }
 }
 ?>
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body> -->
-
-<!-- </body>
-</html> -->

@@ -113,6 +113,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         endd:
         echo "<meta http-equiv='refresh' content='0; url=EditUserPage.php?id=".$id."'>";
+    }else if(isset($_POST['AjukanPertanyaanButton'])) {
+        $_SESSION['pesan'] = '';
+
+        $idUser = $_GET['id'];
+        $pertanyaan = $_POST['AjukanPertanyaan'];
+        $waktu = time();
+
+        $query = $pdo->prepare("INSERT INTO pertanyaan VALUES (null, :idUser, :pertanyaan, :waktu);");
+        $query->bindParam(':idUser', $idUser);
+        $query->bindParam(':pertanyaan', $pertanyaan);
+        $query->bindParam(':waktu', $waktu);
+
+        try {
+            $query->execute();
+            $_SESSION['didit'] = true;
+            $_SESSION['pesan'] = "Pertanyaan Anda Berhasil Ditambah!";
+            goto enddd;
+        } catch (PDOException $e) {
+            $_SESSION['error'] = true;
+            $_SESSION['pesan'] = "Ada sesuatu yang salah!";
+            echo $e->getMessage();
+            goto enddd;
+        }
+        enddd:
+        echo "<meta http-equiv='refresh' content='0; url=HomePage.php'>";
     } else {
         unset($_SESSION['login']);
         unset($_SESSION['username']);
