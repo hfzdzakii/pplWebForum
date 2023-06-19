@@ -31,10 +31,10 @@ try {
 
 <?php echo $head ?>
 <?php echo $header ?>
-<div class=" bg-[#EDF2F4] flex items-center justify-center flex-col px-80">
-    <div class="p-10 flex items-center justify-center flex-col mt-1">
+<div class="min-h-[100vh] w-[100vw] bg-[#EDF2F4] flex items-center flex-col">
+    <div class="w-[60%] flex items-center items-center flex-col">
         <?php foreach($Pertanyaan as $baris) : ?>
-            <a href="JawabPage.php?idPertanyaan=<?php echo $baris['id'] ?>" class="w-[100%] bg-white rounded-md border-solid border-2 border-[#2B2D42] pb-8 mb-8">
+            <a href="JawabPage.php?idPertanyaan=<?php echo $baris['id'] ?>" class="w-[100%] bg-white rounded-md border-solid border-2 border-[#2B2D42] pb-8 mt-4">
                 <div class="px-8 py-2 text-2xl font-semibold">
                     <b><?php echo $baris['tanya'] ?></b>
                 </div>

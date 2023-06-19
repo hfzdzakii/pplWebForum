@@ -140,13 +140,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "<meta http-equiv='refresh' content='0; url=HomePage.php'>";
     } else if(isset($_POST['kirimJawaban'])) {
         $idPertanyaan = $_GET['idPertanyaan'];
-        $idUser = $_GET['idUser'];
+        $idUser = $_SESSION['id'];
         $content = $_POST['content'];
-        $username = strtolower(stripslashes($_POST['sebagai']));
+        $username = $_POST['sebagai'];
         $waktu = time();
 
-
-        $insert_query = $pdo->prepare("INSERT into jawaban values(null,'$idPertanyaan','$content',0,'$idUser','$username','$waktu')");
+        $insert_query = $pdo->prepare("INSERT into jawaban values(null, :idPertanyaan , :content, 0, :idUser, :username, :waktu)");
+        $insert_query->bindParam(':idPertanyaan', $idPertanyaan);
+        $insert_query->bindParam(':content', $content);
+        $insert_query->bindParam(':idUser', $idUser);
+        $insert_query->bindParam(':username', $username);
+        $insert_query->bindParam(':waktu', $waktu);
         try {
             $insert_query->execute();
             
@@ -155,6 +159,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         echo "<meta http-equiv='refresh' content='0; url=NewestPage.php'>";
         die();
+    } else if(isset($_POST['SubmitKomentar'])) {
+        $_SESSION['pesan'] = '';
+
+        $idJawaban = $_GET['idJawaban'];
+        $idUser = $_SESSION['id'];
+        $komentar = $_POST['Komentar'];
+        $waktu = time();
+
+        $query = $pdo->prepare("INSERT INTO komentar VALUES (null, :idJawaban, :idUser, :komentar, :waktu);");
+        $query->bindParam(':idJawaban', $idJawaban);
+        $query->bindParam(':idUser', $idUser);
+        $query->bindParam(':komentar', $komentar);
+        $query->bindParam(':waktu', $waktu);
+
+        try {
+            $query->execute();
+            $_SESSION['didit'] = true;
+            $_SESSION['pesan'] = "Komentar Anda Berhasil Ditambah!";
+            goto ennddd;
+        } catch (PDOException $e) {
+            $_SESSION['error'] = true;
+            $_SESSION['pesan'] = "Ada sesuatu yang salah!";
+            echo $e->getMessage();
+            goto ennddd;
+        }
+        ennddd:
+        echo "<meta http-equiv='refresh' content='0; url=CommentPage.php?id=".$idJawaban."'>";
     } else {
         unset($_SESSION['login']);
         unset($_SESSION['username']);

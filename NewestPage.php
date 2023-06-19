@@ -30,7 +30,7 @@ try {
     echo $e->getMessage();
 }
 
-$daftarPostingan = $pdo->prepare("SELECT jawaban.jawaban, user.username, pertanyaan.pertanyaan, jawaban.upvote FROM jawaban INNER JOIN pertanyaan ON jawaban.id_pertanyaan = pertanyaan.id_pertanyaan INNER JOIN user ON jawaban.id_user = user.id_user;");
+$daftarPostingan = $pdo->prepare("SELECT jawaban.id_jawaban, jawaban.jawaban, user.username, pertanyaan.pertanyaan, jawaban.upvote FROM jawaban INNER JOIN pertanyaan ON jawaban.id_pertanyaan = pertanyaan.id_pertanyaan INNER JOIN user ON jawaban.id_user = user.id_user WHERE jawaban.upvote<5 ORDER BY jawaban.waktu DESC;");
 try {
     $daftarPostingan->execute();
     $Postingan = $daftarPostingan->fetchAll(PDO::FETCH_ASSOC);
@@ -46,7 +46,7 @@ try {
     <div class=" flex w-[50%]  mr-5 flex-col"> <!-- h-[1000px] -->
         <div class="flex justify-center border-2 border-black h-20 w-[100%] bg-[#FFFFFF]">
             <form action="controller.php?id=<?php echo $id ?>" method="post" class="w-[100%] flex flex-col justify-center items-center"> <!-- controller.php -->
-            <?php if (isset($_SESSION['error'])) : ?>
+                <?php if (isset($_SESSION['error'])) : ?>
                 <p style="color: red; font-style: italic; margin-top: 5px;"><?php echo $_SESSION['pesan'];
                                                                                         unset($_SESSION['pesan']);
                                                                                         unset($_SESSION['error']); ?></p>
@@ -69,14 +69,20 @@ try {
                 <div class="flex items-center w-[10%] flex-col text-center">
                     <img id="upvote" class="mb-1 mt-5" width="30" height="30" src="https://img.icons8.com/badges/30/up.png"/>
                     <div class="mb-1"><?php echo $post['upvote'] ?></div>
-                    <img id="downvote" class="mb-1" width="30" height="30" src="https://img.icons8.com/badges/30/down.png"/>
                 </div>
                 <div class="flex w-[90%] mt-3 flex-col">
-                    <div class="mb-1 text-[24px] text-justify">Dijawab Oleh <?php echo $post['username'] ?></div>
-                    <div class="text-[36px] mb-1 text-justify"><?php echo $post['pertanyaan'] ?></div>
-                    <div class="flex flex-col mb-2 text-[24px] w-[400px]">
+                    <div class="mb-1 text-[18px] text-justify">Dijawab Oleh <?php echo $post['username'] ?></div>
+                    <a href="CommentPage.php?id=<?php echo $post['id_jawaban'] ?>" class="text-[25px] mb-1 text-justify"><?php echo $post['pertanyaan'] ?></a>
+                    <div class="flex flex-col mb-2 text-[18px] w-[100%] pr-[1rem]">
                         <div class="mb-1 text-justify	">
-                            <?php echo $post['jawaban'] ?>
+                            <?php 
+                                if (strlen($post['jawaban']) > 300) {
+                                    $modify = substr($post['jawaban'], 0, 300) . "...";
+                                    echo $modify;
+                                } else {
+                                    echo $post['jawaban'];
+                                }
+                            ?>
                         </div>
                     </div>
                     <img id="komen" class="mb-1" width="25" height="25" src="https://img.icons8.com/ios/25/comments--v1.png" alt="comment" />

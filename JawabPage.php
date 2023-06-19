@@ -26,26 +26,13 @@ try {
 
 <?php echo $head ?>
 <?php echo $header?>
-<?php
-    // if(isset($_REQUEST['kirimJawaban']))
-    // {
-    //    $content = $_REQUEST['content'];
 
-    //     $insert_query = $pdo->prepare("INSERT into jawaban values(null,1,'$content',0,1,'farel','1')");
-    //     try {
-    //         $insert_query->execute();
-            
-    //     } catch (PDOException $e) {
-    //         echo $e->getMessage();
-    //     }
-    // }
-?>
 <div class="h-screen w-sreen bg-[#EDF2F4] flex flex-col items-center">
     <div class="bg-[#EDF2F4] w-4/5 mt-[10px] ">
         <p class="text-[35px]"> <?php echo $data[0]['pertanyaan'] ?> </p>
     </div>
     <div class="w-4/5 space-y-5">
-        <form action="controller.php?idPertanyaan=<?php echo $id_pertanyaan ?>&idUser=<?php echo $id ?>" method="post" enctype="multipart/form-data">
+        <form action="controller.php?idPertanyaan=<?php echo $id_pertanyaan ?>" method="post" enctype="multipart/form-data">
                 <p class="text-[20px]"> Send as : </p>
                 <input name="sebagai" type="radio" value="<?php echo $nama ?>" checked/> <label> <?php echo $nama ?> </label>
                 <br>
@@ -57,8 +44,7 @@ try {
 </div>
 <!-- <div id="editor"> </div> -->
 <script>
-        ClassicEditor
-                .create( document.querySelector( '#content' ),{
+        ClassicEditor.create( document.querySelector( '#content' ),{
                     ckfinder:
                     {
                         uploadUrl: 'fileupload.php'
