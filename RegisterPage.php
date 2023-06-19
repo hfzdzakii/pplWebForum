@@ -24,9 +24,9 @@ $tail = $yielder->getTail();
 		<hr class="border border-black w-[600px] my-4">
 		<form action="controller.php" method="post" class="flex justify-center flex-col items-center">
 			<?php if (isset($_SESSION['error'])) : ?>
-                    <p style="color: red; font-style: italic; margin-bottom: 1rem;"><?php echo $_SESSION['pesan'];
-																						unset($_SESSION['pesan']);
-																						unset($_SESSION['error']); ?></p>
+				<p style="color: red; font-style: italic; margin-bottom: 1rem;"><?php echo $_SESSION['pesan'];
+																					unset($_SESSION['pesan']);
+																					unset($_SESSION['error']); ?></p>
 			<?php endif ?>
 			<?php if (isset($_SESSION['didit'])) : ?>
 				<p style="color: blue; font-style: italic; margin-bottom: 1rem;"><?php echo $_SESSION['pesan'];

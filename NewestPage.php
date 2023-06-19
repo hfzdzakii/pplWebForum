@@ -30,7 +30,7 @@ try {
     echo $e->getMessage();
 }
 
-$daftarPostingan = $pdo->prepare("SELECT jawaban.id_jawaban, jawaban.jawaban, user.username, pertanyaan.pertanyaan, jawaban.upvote FROM jawaban INNER JOIN pertanyaan ON jawaban.id_pertanyaan = pertanyaan.id_pertanyaan INNER JOIN user ON jawaban.id_user = user.id_user WHERE jawaban.upvote>=5 ORDER BY jawaban.waktu DESC;");
+$daftarPostingan = $pdo->prepare("SELECT jawaban.id_jawaban, jawaban.jawaban, user.username, pertanyaan.pertanyaan, jawaban.upvote FROM jawaban INNER JOIN pertanyaan ON jawaban.id_pertanyaan = pertanyaan.id_pertanyaan INNER JOIN user ON jawaban.id_user = user.id_user WHERE jawaban.upvote<5 ORDER BY jawaban.waktu DESC;");
 try {
     $daftarPostingan->execute();
     $Postingan = $daftarPostingan->fetchAll(PDO::FETCH_ASSOC);
@@ -56,11 +56,11 @@ try {
 <?php echo $head ?>
 <?php echo $header ?>
 
-<div class="flex justify-center w-[100vw] relative p-[10px] bg-[#EDF2F4] min-h-[100vh]">
+<div class="flex justify-center w-[100vw] relative p-[10px] bg-[#EDF2F4] ">
     <div class=" flex w-[50%]  mr-5 flex-col"> <!-- h-[1000px] -->
         <div class="flex justify-center border-2 border-black h-20 w-[100%] bg-[#FFFFFF]">
             <form action="controller.php?id=<?php echo $id ?>" method="post" class="w-[100%] flex flex-col justify-center items-center"> <!-- controller.php -->
-            <?php if (isset($_SESSION['error'])) : ?>
+                <?php if (isset($_SESSION['error'])) : ?>
                 <p style="color: red; font-style: italic; margin-top: 5px;"><?php echo $_SESSION['pesan'];
                                                                                         unset($_SESSION['pesan']);
                                                                                         unset($_SESSION['error']); ?></p>
@@ -90,16 +90,16 @@ try {
                 <div class="flex items-center w-[10%] flex-col text-center">
                     <div class="mt-4"></div>
                     <?php if(!$pernah): ?>
-                        <a href="controller.php?from=top&aksi=upvote&idJaw=<?php echo $post['id_jawaban'] ?>&vote=<?php echo $post['upvote'] ?>"><img width="30" height="30" src="https://img.icons8.com/material-sharp/30/filled-like.png" alt="filled-like"/></a>
+                        <a href="controller.php?from=new&aksi=upvote&idJaw=<?php echo $post['id_jawaban'] ?>&vote=<?php echo $post['upvote'] ?>"><img width="30" height="30" src="https://img.icons8.com/material-sharp/30/filled-like.png" alt="filled-like"/></a>
                     <?php endif ?>
                     <?php if($pernah) : ?>
-                        <a href="controller.php?from=top&aksi=downvote&idJaw=<?php echo $post['id_jawaban'] ?>&vote=<?php echo $post['upvote'] ?>"><img width="30" height="30" src="https://img.icons8.com/color/30/FF0000/filled-like.png" alt="filled-like"/></a>
+                        <a href="controller.php?from=new&aksi=downvote&idJaw=<?php echo $post['id_jawaban'] ?>&vote=<?php echo $post['upvote'] ?>"><img width="30" height="30" src="https://img.icons8.com/color/30/FF0000/filled-like.png" alt="filled-like"/></a>
                     <?php endif ?>
                     <div class="mb-1"><?php echo $post['upvote'] ?></div>
                 </div>
                 <div class="flex w-[90%] mt-3 flex-col">
                     <div class="mb-1 text-[18px] text-justify">Dijawab Oleh <?php echo $post['username'] ?></div>
-                    <a href="CommentPage.php?id=<?php echo $post['id_jawaban'] ?>&from=top" class="text-[25px] mb-1 text-justify"><?php echo $post['pertanyaan'] ?></a>
+                    <a href="CommentPage.php?id=<?php echo $post['id_jawaban'] ?>&from=new" class="text-[25px] mb-1 text-justify"><?php echo $post['pertanyaan'] ?></a>
                     <div class="flex flex-col mb-2 text-[18px] w-[100%] pr-[1rem]">
                         <div class="mb-1 text-justify	">
                             <?php 
@@ -135,7 +135,7 @@ try {
                 </div>
             </div>
             <button id="moreQuestion" class="text-center rounded-md bg-[#D90429] mt-2 h-[40px] w-[100%] text-[#FFFFFF]">More Questions</button>
-            <button id="morePost" class="text-center rounded-md bg-[#D90429] mt-2 h-[40px] w-[100%] text-[#FFFFFF]">More Post</button>
+            <button id="topPost" class="text-center rounded-md bg-[#D90429] mt-2 h-[40px] w-[100%] text-[#FFFFFF]">Top Post</button>
         </div>
     </div>
 </div>
@@ -165,8 +165,8 @@ try {
             window.location.href = 'KumpulanPage.php'
         })
 
-        $('#morePost').click(function() {
-            window.location.href = 'NewestPage.php'
+        $('#topPost').click(function() {
+            window.location.href = 'HomePage.php'
         })
 
 
