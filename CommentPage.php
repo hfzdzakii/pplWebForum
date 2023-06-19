@@ -11,7 +11,7 @@ if (isset($_SESSION['login'])) {
     die();
 }
 
-$state = "CommentPage";
+$state = $_GET['from'];
 $nama = $_SESSION['username'];
 $id = $_SESSION['id'];
 $idJawaban = $_GET['id'];

@@ -197,7 +197,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_GET['aksi'])) {
         $aksi = $_GET['aksi'];
         $_SESSION['pesan'] = '';
-        if ($aksi == 'deleteUser') {
+        if ($aksi == 'upvote') {
+            $idUser = $_SESSION['id'];
+            $idJawaban = $_GET['idJaw'];
+            $vote = $_GET['vote'];
+            $from = $_GET['from'];
+            if ($from == "top") {
+                $arah = "HomePage.php";
+            }else {
+                $arah = "NewestPage.php";
+            }
+
+            $query = $pdo->prepare("INSERT INTO upvote_log VALUES (null, :idUser, :idJawaban); UPDATE jawaban SET upvote=:vote+1 where id_jawaban=:idJawaban");
+            $query->bindParam(':idUser', $idUser);
+            $query->bindParam(':idJawaban', $idJawaban);
+            $query->bindParam(':vote', $vote);
+
+            try {
+                $query->execute();
+            } catch (PDOException $e) {
+                echo $e->getMessage();
+            }
+            echo "<meta http-equiv='refresh' content='0; url=".$arah."'>";
+            die();
+        } else if($aksi == 'downvote') {
+            $idJawaban = $_GET['idJaw'];
+            $vote = $_GET['vote'];
+            $from = $_GET['from'];
+            if ($from == "top") {
+                $arah = "HomePage.php";
+            }else {
+                $arah = "NewestPage.php";
+            }
+
+            $query = $pdo->prepare("DELETE FROM upvote_log WHERE id_jawaban=:idJawaban; UPDATE jawaban SET upvote=:vote-1 where id_jawaban=:idJawaban");
+            $query->bindParam(':idJawaban', $idJawaban);
+            $query->bindParam(':vote', $vote);
+
+            try {
+                $query->execute();
+            } catch (PDOException $e) {
+                echo $e->getMessage();
+            }
+            echo "<meta http-equiv='refresh' content='0; url=".$arah."'>";
             die();
         } else {
             unset($_SESSION['login']);

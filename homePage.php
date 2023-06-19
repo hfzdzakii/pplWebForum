@@ -30,10 +30,24 @@ try {
     echo $e->getMessage();
 }
 
-$daftarPostingan = $pdo->prepare("SELECT jawaban.jawaban, user.username, pertanyaan.pertanyaan, jawaban.upvote FROM jawaban INNER JOIN pertanyaan ON jawaban.id_pertanyaan = pertanyaan.id_pertanyaan INNER JOIN user ON jawaban.id_user = user.id_user WHERE jawaban.upvote>=5 ORDER BY jawaban.waktu DESC;");
+$daftarPostingan = $pdo->prepare("SELECT jawaban.id_jawaban, jawaban.jawaban, user.username, pertanyaan.pertanyaan, jawaban.upvote FROM jawaban INNER JOIN pertanyaan ON jawaban.id_pertanyaan = pertanyaan.id_pertanyaan INNER JOIN user ON jawaban.id_user = user.id_user WHERE jawaban.upvote>=5 ORDER BY jawaban.waktu DESC;");
 try {
     $daftarPostingan->execute();
     $Postingan = $daftarPostingan->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo $e->getMessage();
+}
+
+$arr = array(); 
+$upvoteLog = $pdo->prepare("SELECT * FROM upvote_log WHERE id_user=:idUser");
+$upvoteLog->bindParam(":idUser", $id);
+try {
+    $upvoteLog->execute();
+    $Voting = $upvoteLog->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($Voting as $vote) {
+        array_push($arr, $vote['id_jawaban']);
+    }
+    $jumlah = count($arr);
 } catch (PDOException $e) {
     echo $e->getMessage();
 }
@@ -64,15 +78,28 @@ try {
                 </div>
             </form>
         </div>
-        <?php foreach($Postingan as $post) : ?>
+        <?php foreach($Postingan as $post) : 
+            $pernah = false;
+            for ($i=0; $i < $jumlah; $i++) { 
+                if ($post['id_jawaban'] == $arr[$i]) {
+                    $pernah = true;
+                }
+            }    
+        ?>
             <div class="flex justify-center border-2 border-black w-[100%] mt-5 bg-white">
                 <div class="flex items-center w-[10%] flex-col text-center">
-                    <img id="upvote" class="mb-1 mt-5" width="30" height="30" src="https://img.icons8.com/badges/30/up.png"/>
+                    <div class="mt-4"></div>
+                    <?php if(!$pernah): ?>
+                        <a href="controller.php?from=top&aksi=upvote&idJaw=<?php echo $post['id_jawaban'] ?>&vote=<?php echo $post['upvote'] ?>"><img width="30" height="30" src="https://img.icons8.com/material-sharp/30/filled-like.png" alt="filled-like"/></a>
+                    <?php endif ?>
+                    <?php if($pernah) : ?>
+                        <a href="controller.php?from=top&aksi=downvote&idJaw=<?php echo $post['id_jawaban'] ?>&vote=<?php echo $post['upvote'] ?>"><img width="30" height="30" src="https://img.icons8.com/color/30/FF0000/filled-like.png" alt="filled-like"/></a>
+                    <?php endif ?>
                     <div class="mb-1"><?php echo $post['upvote'] ?></div>
                 </div>
                 <div class="flex w-[90%] mt-3 flex-col">
                     <div class="mb-1 text-[18px] text-justify">Dijawab Oleh <?php echo $post['username'] ?></div>
-                    <div class="text-[25px] mb-1 text-justify"><?php echo $post['pertanyaan'] ?></div>
+                    <a href="CommentPage.php?id=<?php echo $post['id_jawaban'] ?>&from=top" class="text-[25px] mb-1 text-justify"><?php echo $post['pertanyaan'] ?></a>
                     <div class="flex flex-col mb-2 text-[18px] w-[100%] pr-[1rem]">
                         <div class="mb-1 text-justify	">
                             <?php 
