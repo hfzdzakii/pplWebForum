@@ -54,6 +54,7 @@ class Yielder
                     <button id="dropdown-toggle" name="profilButton" class="type=buttonn bg-[#D90429] pb-1 px-4 pt-1 hover:bg-[#96021b] text-white font-medium rounded-full transition duration-300">'.$nama.'
                     </button>
                     <div class="origin-top-right absolute mt-2 w-[150px] z-[100]  hidden flex flex-col" id="dropdown-menu">
+                        <button id="myPost" class="border-black border-2 bg-[#D90429] text-white rounded-full mb-1 pb-1 px-1 pt-1">Postinganku</button>
                         <button id="editUserPass" class="border-black border-2 bg-[#D90429] text-white rounded-full mb-1 pb-1 px-1 pt-1">Edit Profil</button>
                         <button id="logot" class="border-black border-2 bg-[#D90429] text-white rounded-full pb-1 px-4 pt-1">Logout</button>
                     </div>

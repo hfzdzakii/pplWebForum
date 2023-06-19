@@ -92,6 +92,10 @@ try {
             }
         });
 
+        $('#myPost').click(function() {
+            window.location.href = 'myPostPage.php'
+        })
+
         $('#logot').click(function() {
             window.location.href = 'controller.php'
         })
