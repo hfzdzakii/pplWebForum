@@ -154,7 +154,7 @@ try {
         });
 
         $('#myPost').click(function() {
-            window.location.href = 'myPostPage.php'
+            window.location.href = 'MyPostPage.php'
         })
 
         $('#logot').click(function() {

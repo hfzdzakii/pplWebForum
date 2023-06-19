@@ -54,7 +54,7 @@ try {
                     Dijawab oleh : <?php echo $dataJawaban[0]['username'] ?>
                 </div>
             </div>
-            <form action="controller.php?idJawaban=<?php echo $dataJawaban[0]['id_jawaban'] ?>" method="post" class="my-4 w-[100%] flex flex-col justify-center">
+            <form action="controller.php?idJawaban=<?php echo $dataJawaban[0]['id_jawaban'] ?>&from=<?php echo $state ?>" method="post" class="my-4 w-[100%] flex flex-col justify-center">
                 <?php if (isset($_SESSION['error'])) : ?>
                     <p style="color: red; font-style: italic; margin-top: 5px;"><?php echo $_SESSION['pesan'];
                                                                                         unset($_SESSION['pesan']);
@@ -93,7 +93,7 @@ try {
         });
 
         $('#myPost').click(function() {
-            window.location.href = 'myPostPage.php'
+            window.location.href = 'MyPostPage.php'
         })
 
         $('#logot').click(function() {
