@@ -15,13 +15,14 @@ $state = $_GET['from'];
 $nama = $_SESSION['username'];
 $id = $_SESSION['id'];
 $idJawaban = $_GET['id'];
+$akses = $_SESSION['akses'];
 
 $yielder = new Yielder($state, $nama);
 $head = $yielder->getHead();
 $tail = $yielder->getTail();
 $header = $yielder->getHeader($state, $nama);
 
-$hasilJawaban = $pdo->prepare("SELECT jawaban.id_jawaban, pertanyaan.pertanyaan, jawaban.jawaban, user.username FROM jawaban INNER JOIN pertanyaan ON jawaban.id_pertanyaan = pertanyaan.id_pertanyaan INNER JOIN user ON jawaban.id_user = user.id_user WHERE jawaban.id_jawaban=".$idJawaban.";");
+$hasilJawaban = $pdo->prepare("SELECT jawaban.id_pertanyaan, jawaban.id_user, jawaban.id_jawaban, pertanyaan.pertanyaan, jawaban.jawaban, jawaban.dijawab AS 'username' FROM jawaban INNER JOIN pertanyaan ON jawaban.id_pertanyaan = pertanyaan.id_pertanyaan INNER JOIN user ON jawaban.id_user = user.id_user WHERE jawaban.id_jawaban=".$idJawaban.";");
 try {
     $hasilJawaban->execute();
     $dataJawaban = $hasilJawaban->fetchAll(PDO::FETCH_ASSOC);
@@ -54,6 +55,12 @@ try {
                     Dijawab oleh : <?php echo $dataJawaban[0]['username'] ?>
                 </div>
             </div>
+            <?php if($akses == "admin" || $dataJawaban[0]['id_user'] == $id):?>
+                <div class="flex w-[100%] self-start mt-4">
+                    <a class="text-xl" href="JawabPage.php?idPertanyaan=<?php echo $dataJawaban[0]['id_pertanyaan'] ?>&idJawaban=<?php echo $dataJawaban[0]['id_jawaban'] ?>&aksi=EditJawaban&from=<?php echo $_GET['from'] ?>">Edit</a>
+                    <a class="text-xl ml-6" href="controller.php?aksi=DeleteJawaban&idJaw=<?php echo $dataJawaban[0]['id_jawaban'] ?>&from=<?php echo $state ?>">Hapus</a>
+                </div>
+            <?php endif ?>
             <form action="controller.php?idJawaban=<?php echo $dataJawaban[0]['id_jawaban'] ?>&from=<?php echo $state ?>" method="post" class="my-4 w-[100%] flex flex-col justify-center">
                 <?php if (isset($_SESSION['error'])) : ?>
                     <p style="color: red; font-style: italic; margin-top: 5px;"><?php echo $_SESSION['pesan'];

@@ -30,7 +30,7 @@ try {
     echo $e->getMessage();
 }
 
-$daftarPostingan = $pdo->prepare("SELECT jawaban.id_jawaban, jawaban.jawaban, user.username, pertanyaan.pertanyaan, jawaban.upvote FROM jawaban INNER JOIN pertanyaan ON jawaban.id_pertanyaan = pertanyaan.id_pertanyaan INNER JOIN user ON jawaban.id_user = user.id_user WHERE jawaban.upvote<5 ORDER BY jawaban.waktu DESC;");
+$daftarPostingan = $pdo->prepare("SELECT jawaban.id_jawaban, jawaban.jawaban, jawaban.dijawab AS 'username', pertanyaan.pertanyaan, jawaban.upvote FROM jawaban INNER JOIN pertanyaan ON jawaban.id_pertanyaan = pertanyaan.id_pertanyaan INNER JOIN user ON jawaban.id_user = user.id_user WHERE jawaban.upvote<5 ORDER BY jawaban.waktu DESC;");
 try {
     $daftarPostingan->execute();
     $Postingan = $daftarPostingan->fetchAll(PDO::FETCH_ASSOC);

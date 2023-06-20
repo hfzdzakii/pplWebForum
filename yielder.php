@@ -40,7 +40,7 @@ class Yielder
 
     private function headerContent($state, $nama)
     {
-        $hasil2 = ($state == "JawabPage") ? 'KumpulanPage.php' : ($state == "new" ? 'NewestPage.php' : 'HomePage.php'); //'HomePage.php'
+        $hasil2 = ($state == "JawabPage") ? 'KumpulanPage.php' : ($state == "new" ? ($state == "new" ? 'NewestPage.php' : 'MyPostPage.php' ) : ($state == "MyPostPage" ? 'HomePage.php' : 'HomePage.php' )); //''NewestPage.php''
         $hasil = $state == "HomePage" ? '' : '<div class="absolute left-[30px] ">
                                                     <a href="'. $hasil2.'"><img width="25" height="25" src="https://img.icons8.com/ios/50/FFFFFF/double-left.png" alt="double-left"/></a>
                                                 </div>';
