@@ -40,7 +40,7 @@ class Yielder
 
     private function headerContent($state, $nama)
     {
-        $hasil2 = ($state == "JawabPage") ? 'KumpulanPage.php' : ($state == "new" ? 'NewestPage.php' : 'HomePage.php'); //'HomePage.php'
+        $hasil2 = ($state == "JawabPage") ? 'KumpulanPage.php' : ($state == "new" ? ($state == "new" ? 'NewestPage.php' : 'MyPostPage.php' ) : ($state == "MyPostPage" ? 'HomePage.php' : 'HomePage.php' )); //''NewestPage.php''
         $hasil = $state == "HomePage" ? '' : '<div class="absolute left-[30px] ">
                                                     <a href="'. $hasil2.'"><img width="25" height="25" src="https://img.icons8.com/ios/50/FFFFFF/double-left.png" alt="double-left"/></a>
                                                 </div>';
@@ -54,6 +54,7 @@ class Yielder
                     <button id="dropdown-toggle" name="profilButton" class="type=buttonn bg-[#D90429] pb-1 px-4 pt-1 hover:bg-[#96021b] text-white font-medium rounded-full transition duration-300">'.$nama.'
                     </button>
                     <div class="origin-top-right absolute mt-2 w-[150px] z-[100]  hidden flex flex-col" id="dropdown-menu">
+                        <button id="myPost" class="border-black border-2 bg-[#D90429] text-white rounded-full mb-1 pb-1 px-1 pt-1">Postinganku</button>
                         <button id="editUserPass" class="border-black border-2 bg-[#D90429] text-white rounded-full mb-1 pb-1 px-1 pt-1">Edit Profil</button>
                         <button id="logot" class="border-black border-2 bg-[#D90429] text-white rounded-full pb-1 px-4 pt-1">Logout</button>
                     </div>

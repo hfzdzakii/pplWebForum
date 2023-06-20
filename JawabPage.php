@@ -32,15 +32,43 @@ try {
         <p class="text-[35px]"> <?php echo $data[0]['pertanyaan'] ?> </p>
     </div>
     <div class="w-4/5 space-y-5">
-        <form action="controller.php?idPertanyaan=<?php echo $id_pertanyaan ?>" method="post" enctype="multipart/form-data">
-                <p class="text-[20px]"> Send as : </p>
-                <input name="sebagai" type="radio" value="<?php echo $nama ?>" checked/> <label> <?php echo $nama ?> </label>
-                <br>
-                <input name="sebagai" type="radio" value="anonymous"/> <label> Anonymous </label>
-                <br>
-                <textarea name="content" id="content" cols="30" rows="10" class="mt-[10px]"></textarea>
-                <button type="submit" name="kirimJawaban" class="bg-[#D90429] w-[100px] h-[40px] rounded-[5px] text-white border-black border-2"> Send </button>
-        </form>
+        <?php if(isset($_GET['aksi'])): 
+            $idPertanyaan = $_GET['idPertanyaan'];
+            $idJawaban = $_GET['idJawaban'];
+            $from = $_GET['from'];
+
+            $dataEdit = $pdo->prepare("SELECT * FROM jawaban WHERE id_jawaban=:idJawaban;");
+            $dataEdit->bindParam('idJawaban', $idJawaban);
+
+            try {
+                $dataEdit->execute();
+                $hasil = $dataEdit->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                echo $e->getMessage();
+            }
+        ?>
+            aowkwokwo
+            <form action="controller.php?idJawaban=<?php echo $hasil[0]['id_jawaban'] ?>&from=<?php echo $from ?>" method="post" enctype="multipart/form-data">
+                    <p class="text-[20px]"> Send as : </p>
+                    <input name="sebagai" type="radio" value="<?php echo $nama ?>" checked/><label><?php echo $nama ?></label>
+                    <br>
+                    <input name="sebagai" type="radio" value="anonymous"/> <label> Anonymous </label>
+                    <br>
+                    <textarea name="content" id="content" cols="30" rows="10" class="mt-[10px]"><?php echo $hasil[0]['jawaban'] ?></textarea>
+                    <button type="submit" name="editJawaban" class="bg-[#D90429] w-[100px] h-[40px] rounded-[5px] text-white border-black border-2"> Send </button>
+            </form>
+        <?php endif ?>
+        <?php if(!isset($_GET['aksi'])): ?>
+            <form action="controller.php?idPertanyaan=<?php echo $id_pertanyaan ?>" method="post" enctype="multipart/form-data">
+                    <p class="text-[20px]"> Send as : </p>
+                    <input name="sebagai" type="radio" value="<?php echo $nama ?>" checked/><label><?php echo $nama ?></label>
+                    <br>
+                    <input name="sebagai" type="radio" value="anonymous"/> <label> Anonymous </label>
+                    <br>
+                    <textarea name="content" id="content" cols="30" rows="10" class="mt-[10px]"></textarea>
+                    <button type="submit" name="kirimJawaban" class="bg-[#D90429] w-[100px] h-[40px] rounded-[5px] text-white border-black border-2"> Send </button>
+            </form>
+        <?php endif ?>
 </div>
 <!-- <div id="editor"> </div> -->
 <script>
@@ -63,6 +91,10 @@ try {
         $('#dropdown-toggle').click(function() {
             $('#dropdown-menu').toggleClass('hidden');
         });
+
+        $('#myPost').click(function() {
+            window.location.href = 'MyPostPage.php'
+        })
         
         $('#logot').click(function() {
             window.location.href = 'controller.php'

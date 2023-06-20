@@ -93,10 +93,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $password = password_hash($password1, PASSWORD_DEFAULT);
 
-        $update_user = $pdo->prepare("UPDATE user SET username = :username, password = :password WHERE id_user = :id");
+        // ambil nama di db sebelumnya
+        $namaBefore = $pdo->prepare("SELECT username FROM user WHERE id_user = :id;");
+        $namaBefore->bindParam(':id', $id);
+        try {
+            $namaBefore->execute();
+            $nama = $namaBefore->fetchAll(PDO::FETCH_ASSOC); 
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+
+        $update_user = $pdo->prepare("UPDATE user SET username = :username, password = :password WHERE id_user = :id; UPDATE jawaban SET dijawab = :username WHERE dijawab = :nama;");
         $update_user->bindParam(':username', $username);
         $update_user->bindParam(':password', $password);
         $update_user->bindParam(':id', $id);
+        $update_user->bindParam(':nama', $nama[0]['username']);
 
         try {
             $update_user->execute();
@@ -113,6 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         endd:
         echo "<meta http-equiv='refresh' content='0; url=EditUserPage.php?id=".$id."'>";
+        die();
     } else if(isset($_POST['AjukanPertanyaanButton'])) {
         $_SESSION['pesan'] = '';
 
@@ -138,6 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         enddd:
         echo "<meta http-equiv='refresh' content='0; url=HomePage.php'>";
+        die();
     } else if(isset($_POST['kirimJawaban'])) {
         $idPertanyaan = $_GET['idPertanyaan'];
         $idUser = $_SESSION['id'];
@@ -162,6 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else if(isset($_POST['SubmitKomentar'])) {
         $_SESSION['pesan'] = '';
 
+        $state = $_GET['from'];
         $idJawaban = $_GET['idJawaban'];
         $idUser = $_SESSION['id'];
         $komentar = $_POST['Komentar'];
@@ -185,7 +199,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             goto ennddd;
         }
         ennddd:
-        echo "<meta http-equiv='refresh' content='0; url=CommentPage.php?id=".$idJawaban."'>";
+        echo "<meta http-equiv='refresh' content='0; url=CommentPage.php?id=".$idJawaban."&from=".$state."'>";
+    } else if(isset($_POST['editJawaban'])) {
+        $_SESSION['pesan'] = '';
+
+        $from = $_GET['from'];
+        $idJawaban = $_GET['idJawaban'];
+        $idUser = $_SESSION['id'];
+        $username = $_POST['sebagai'];
+        $content = $_POST['content'];
+
+        $editJawaban = $pdo->prepare("UPDATE jawaban SET id_user=:idUser, dijawab=:username, jawaban=:content WHERE id_jawaban=:idJawaban");
+        $editJawaban->bindParam(':idUser', $idUser);
+        $editJawaban->bindParam(':username', $username);
+        $editJawaban->bindParam(':content', $content);
+        $editJawaban->bindParam(':idJawaban', $idJawaban);
+
+        try {
+            $editJawaban->execute();
+            $_SESSION['didit'] = true;
+            $_SESSION['pesan'] = "Jawaban Anda Berhasil Diubah!";
+        } catch (PDOException $e) {
+            $_SESSION['error'] = true;
+            $_SESSION['pesan'] = "Ada sesuatu yang salah!";
+            echo $e->getMessage();
+        }
+        echo "<meta http-equiv='refresh' content='0; url=CommentPage.php?id=".$idJawaban."&from=".$from."'>";
+        die();
     } else {
         unset($_SESSION['login']);
         unset($_SESSION['username']);
@@ -240,6 +280,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo $e->getMessage();
             }
             echo "<meta http-equiv='refresh' content='0; url=".$arah."'>";
+            die();
+        } else if($aksi == "DeletePertanyaan") {
+            $idPert = $_GET['idPert'];
+
+            $query = $pdo->prepare("DELETE FROM pertanyaan WHERE id_pertanyaan=:idPert;");
+            $query->bindParam(':idPert', $idPert);
+
+            try {
+                $query->execute();
+                $_SESSION['didit'] = true;
+                $_SESSION['pesan'] = "Pertanyaan Anda Berhasil Dihapus!";
+            } catch (PDOException $e) {
+                $_SESSION['error'] = true;
+                $_SESSION['pesan'] = "Ada sesuatu yang salah!";
+                echo $e->getMessage();
+            }
+            echo "<meta http-equiv='refresh' content='0; url=MyPostPage.php'>";
+            die();
+        } else if($aksi == "DeleteJawaban") {
+            $idJaw = $_GET['idJaw'];
+            $from = $_GET['from'];
+
+            $query = $pdo->prepare("DELETE FROM jawaban WHERE id_jawaban=:idJaw;");
+            $query->bindParam(':idJaw', $idJaw);
+
+            try {
+                $query->execute();
+                $_SESSION['didit'] = true;
+                $_SESSION['pesan'] = "Jawaban Anda Berhasil Dihapus!";
+            } catch (PDOException $e) {
+                $_SESSION['error'] = true;
+                $_SESSION['pesan'] = "Ada sesuatu yang salah!";
+                echo $e->getMessage();
+            }
+            echo "<meta http-equiv='refresh' content='0; url=MyPostPage.php'>";
             die();
         } else {
             unset($_SESSION['login']);

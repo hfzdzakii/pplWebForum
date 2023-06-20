@@ -51,6 +51,10 @@ try {
         $('#dropdown-toggle').click(function() {
             $('#dropdown-menu').toggleClass('hidden');
         });
+
+        $('#myPost').click(function() {
+            window.location.href = 'MyPostPage.php'
+        })
         
         $('#logot').click(function() {
             window.location.href = 'controller.php'
