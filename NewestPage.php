@@ -56,7 +56,7 @@ try {
 <?php echo $head ?>
 <?php echo $header ?>
 
-<div class="flex justify-center w-[100vw] relative p-[10px] bg-[#EDF2F4] ">
+<div class="flex justify-center w-[100vw] relative p-[10px] bg-[#EDF2F4] min-h-[100vh]">
     <div class=" flex w-[50%]  mr-5 flex-col"> <!-- h-[1000px] -->
         <div class="flex justify-center border-2 border-black h-20 w-[100%] bg-[#FFFFFF]">
             <form action="controller.php?id=<?php echo $id ?>" method="post" class="w-[100%] flex flex-col justify-center items-center"> <!-- controller.php -->
@@ -112,7 +112,6 @@ try {
                             ?>
                         </div>
                     </div>
-                    <img id="komen" class="mb-1" width="25" height="25" src="https://img.icons8.com/ios/25/comments--v1.png" alt="comment" />
                 </div>
             </div>
         <?php endforeach ?>
