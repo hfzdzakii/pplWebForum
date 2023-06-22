@@ -42,7 +42,7 @@ try {
 
 <?php echo $head ?>
 <?php echo $header;?>
-<div class=" bg-[#2B2D42] flex items-center justify-center flex-col">
+<div class=" bg-[#2B2D42] flex items-center justify-center flex-col min-h-[100vh]">
         <div class="bg-white p-10  rounded shadow-md flex items-center justify-center flex-col my-6 w-[75%]">
             <div class="border-solid border-2 border-[#2B2D42] pb-8 w-[100%]">
                 <div class="px-8 py-8 text-2xl font-semibold">

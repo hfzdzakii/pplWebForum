@@ -112,7 +112,6 @@ try {
                             ?>
                         </div>
                     </div>
-                    <img id="komen" class="mb-1" width="25" height="25" src="https://img.icons8.com/ios/25/comments--v1.png" alt="comment" />
                 </div>
             </div>
         <?php endforeach ?>
